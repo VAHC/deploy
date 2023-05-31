@@ -12,7 +12,7 @@ import { login } from "./redux/action";
 //Componentes
 import { Home } from "./components/home/Home";
 import { Nav } from "./components/nav/Nav";
-import { Catalogo } from './components/catalogo/catalogo';
+import { Catalogo } from './components/catalogo/Catalogo';
 import { Suscripcion } from './components/suscripcion/Suscripcion';
 import { Footer } from "./components/footer/Footer";
 import { AboutUs } from "./components/aboutUs/AboutUs";

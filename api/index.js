@@ -19,7 +19,7 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require('./src/app.js')
 const { conn } = require('./src/db.js')
-const { LoadAllBooks } = require('../api/src/controllers/books/LoadBooks.js')
+const { LoadAllBooks } = require('./src/controllers/books/LoadBooks.js')
 
 // Syncing all the models at once.
 conn.sync({ force: false}).then(() => {
