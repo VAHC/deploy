@@ -3,6 +3,8 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from "react";
+import axios from 'axios';
+axios.defaults.baseURL = 'http://localhost:3001/';
 
 //Action para logueo
 import { login } from "./redux/action";

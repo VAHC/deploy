@@ -29,7 +29,7 @@ export const UPDATE_USER = "UPDATE_USER";
 
 export const getAllBooks = () => {
   return async (dispatch) => {
-    const response = await axios.get('http://localhost:3001/books');
+    const response = await axios.get('/books');
     const allBooks = response.data;
     dispatch({ type: GET_ALL_BOOKS, payload: allBooks })
   }
@@ -65,7 +65,7 @@ export const searchByNameOrAuthor = (name) => {
   // }
   return async (dispatch) => {
     try {
-      const response = await axios.get(`http://localhost:3001/books?title=${name}`)
+      const response = await axios.get(`/books?title=${name}`)
       return dispatch({
         type: SEARCH_BY_NAME_OR_AUTHOR,
         payload: response.data
@@ -90,14 +90,14 @@ export const filterAuthor = (value) => {
 
 export const postBook = (book) => {
   return async function (dispatch) {
-    let response = await axios.post('http://localhost:3001/books', book)
+    let response = await axios.post('/books', book)
     return response
   }
 }
 
 export const createUser = (user) => {
   return async function (dispatch) {
-    let response = await axios.post('http://localhost:3001/books/auth/registro', user)
+    let response = await axios.post('/books/auth/registro', user)
     return response
   }
 }
@@ -125,7 +125,7 @@ export const getAutores = () => {
 export const getReviewsBook = (bookId) => {
   //console.log('action' + bookId);
   return async (dispatch) => {
-    const response = await axios.get(`http://localhost:3001/books/${bookId}`);
+    const response = await axios.get(`/books/${bookId}`);
     const allReviews = response.data;
     dispatch({ type: GET_REVIEWS_BOOK, payload: allReviews })
   }
@@ -133,7 +133,7 @@ export const getReviewsBook = (bookId) => {
 
 export const postReview = (review) => {
   return async function (dispatch) {
-    let response = await axios.post('http://localhost:3001/reviews', review)
+    let response = await axios.post('/reviews', review)
     return response
   }
 }
@@ -149,7 +149,7 @@ export const logout = () => {
 //trae todas las reviews de un usuario
 export const getReviewsByUser = (userId) => {
   return async (dispatch) => {
-    const response = await axios.get(`http://localhost:3001/users/${userId}`);
+    const response = await axios.get(`/users/${userId}`);
     const userReviews = response.data;
     dispatch({ type: GET_REVIEWS_BY_USER, payload: userReviews })
   }
@@ -158,14 +158,14 @@ export const getReviewsByUser = (userId) => {
 export const modifyBook = (bookEdit) => {
   //console.log(bookEdit)
   return async function (dispatch) {
-    await axios.put('http://localhost:3001/books/putbook', bookEdit)
+    await axios.put('/books/putbook', bookEdit)
     dispatch({ type: PUT_BOOK })
   }
 }
 
 export const putReview = (reviewId, review) => {
   return async function (dispatch) {
-    let response = await axios.put(`http://localhost:3001/reviews/${reviewId}`, review)
+    let response = await axios.put(`/reviews/${reviewId}`, review)
     dispatch({type: PUT_REVIEW})
     //console.log('la action toma el dispatch');
     return response
@@ -174,7 +174,7 @@ export const putReview = (reviewId, review) => {
 
 export const deleteReview = (reviewId) => {
   return async function (dispatch) {
-    let response = await axios.put(`http://localhost:3001/reviews/delete/${reviewId}`)
+    let response = await axios.put(`/reviews/delete/${reviewId}`)
     dispatch({ type: DELETE_REVIEW })
     return response
   }
@@ -182,7 +182,7 @@ export const deleteReview = (reviewId) => {
 
 export const updateUser = (user) => {
   return async function (dispatch) {
-    await axios.put('http://localhost:3001/users', user)
+    await axios.put('/users', user)
     dispatch({ type: UPDATE_USER })
   }
 }
