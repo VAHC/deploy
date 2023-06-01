@@ -3,9 +3,11 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from "../../redux/action";
+import { URL_Railway } from '../../../ruta';
 
 export const Login = () => {
 
+    //const URL = 'https://deploy-production-dccf.up.railway.app'
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -36,7 +38,7 @@ export const Login = () => {
         event.preventDefault()
         try {
             // Envío solicitud de inicio de sesión al backend
-            const response = await fetch('http://localhost:3001/books/auth/login', {
+            const response = await fetch(`${URL_Railway}/books/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData)
@@ -62,7 +64,7 @@ export const Login = () => {
 
     //LOGIN CON GOOGLE
     const handleClick = async () => {
-        window.location.href = 'http://localhost:3001/books/auth/authSocial';
+        window.location.href = `${URL_Railway}/books/auth/authSocial`;
     }
 
     useEffect(() => {

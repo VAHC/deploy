@@ -4,9 +4,13 @@ import { useState, useEffect } from 'react';
 import validation from "./validationRegistro";
 import { useDispatch } from 'react-redux';
 import { createUser } from "../../redux/action";
+//require('../../../ruta')
+import { URL_Railway } from '../../../ruta';
 
 export const Registro = () => {
 
+    
+    const URL = URL_Railway+"/books/auth/authSocial" 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -137,7 +141,8 @@ export const Registro = () => {
                         </div>
 
                         <div className="col-md-4">
-                            <label htmlFor="passwordC" className="form-label">Confirmar contraseña</label>
+                            URLRailway
+                            <label htmlFor="passwordC"  className="form-label">Confirmar contraseña</label>
                             <input type="password" className="form-control" name="passwordC" value={inputsConfirm.passwordC} onChange={handleInputChange} required />
                             {errors.passwordConfirm && <p className="text-danger">{errors.passwordConfirm}</p>}
                         </div>
@@ -147,7 +152,7 @@ export const Registro = () => {
                         </div>
 
                         <div className="col-12 d-flex justify-content-center m-1">
-                            <a href="http://localhost:3001/books/auth/authSocial" className="btn btn-outline-dark">
+                            <a href={URL} className="btn btn-outline-dark">
                                 <i className="bi bi-google fs-3 mx-2"></i>Registrarme con G-mail
                             </a>
                         </div>
