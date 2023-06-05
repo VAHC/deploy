@@ -35,6 +35,7 @@ export const EMPTY_CART = "EMPTY_CART";
 
 export const getAllBooks = () => {
   return async (dispatch) => {
+    console.log(URL_Railway);
     const response = await axios.get(`${URL_Railway}/books`);
     const allBooks = response.data;
     dispatch({ type: GET_ALL_BOOKS, payload: allBooks })
