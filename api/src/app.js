@@ -4,7 +4,8 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
 const passport = require('passport');
-const session = require('express-session');
+const session = require('cookie-session');
+//const session = require('express-session');
 const cors = require('cors');
 
 
