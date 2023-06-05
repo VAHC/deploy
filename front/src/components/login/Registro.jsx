@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import validation from "./validationRegistro";
 import { useDispatch } from 'react-redux';
 import { createUser } from "../../redux/action";
-import {URL_Railway} from '../../../ruta'
+import URL_Railway from '../../../ruta'
 
 export const Registro = () => {
 

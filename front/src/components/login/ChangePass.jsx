@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { URL_Railway } from "../../../ruta";
+import URL_Railway  from "../../../ruta";
 import axios from "axios";
 
 export const ChangePass = () => {
