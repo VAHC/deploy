@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUser } from "../../redux/action";
 
-export const FormEditUser = ({user}) => {
+export const FormEditUser = ({ toggleModal, user }) => {
 
     const dispatch = useDispatch();
 
@@ -31,20 +31,26 @@ export const FormEditUser = ({user}) => {
         }))
     }
 
-    const handleSubmit =  (event) => {
-        console.log(userData)
-        dispatch(updateUser(userData))
-        alert("Datos modificados con éxito")
-        // .then((response) => {
-        //         console.log(response)
-        //         if (response.status !== 400) {
-        //             alert("Datos modificados con éxito")
-        //         } else alert("ERROR")
-        //     })
-        //     .catch((error) => {
-        //         alert("Server error")
-        //     })
-    }
+    const handleSubmit = () => {
+        dispatch(updateUser(userData));
+        alert("Datos modificados con éxito");
+        toggleModal();
+    };
+
+    // const handleSubmit =  (event) => {
+    //     console.log(userData)
+    //     dispatch(updateUser(userData))
+    //     alert("Datos modificados con éxito")
+    // .then((response) => {
+    //         console.log(response)
+    //         if (response.status !== 400) {
+    //             alert("Datos modificados con éxito")
+    //         } else alert("ERROR")
+    //     })
+    //     .catch((error) => {
+    //         alert("Server error")
+    //     })
+    //}
 
     return (
         <>

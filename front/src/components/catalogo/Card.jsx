@@ -6,14 +6,16 @@ import { useDispatch } from "react-redux";
 import { setDetail } from "../../redux/action";
 
 const bookCard = ({book}) => {
-
+  
   const qualificationObtained = (book) => {
-    if (book.reviews && Array.isArray(book.reviews) && book.reviews.length > 0) {
+    const reviews = book.reviews
+    const notDeletedReviews = reviews.filter(review => !review.deleted)
+    if (notDeletedReviews && Array.isArray(notDeletedReviews) && notDeletedReviews.length > 0) {
       let sum = 0;
-      for (let i = 0; i < book.reviews.length; i++) {
-        sum += book.reviews[i].qualification;
+      for (let i = 0; i < notDeletedReviews.length; i++) {
+        sum += notDeletedReviews[i].qualification;
       }
-      let average = sum / book.reviews.length;
+      let average = sum / notDeletedReviews.length;
       return Math.round(average);
     }
     return 0; // Valor predeterminado si no hay reviews o no es un array válido

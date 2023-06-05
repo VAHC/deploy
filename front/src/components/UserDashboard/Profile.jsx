@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FormEditUser } from "./FormEditUser";
 
 export const Profile = () => {
@@ -15,8 +15,8 @@ export const Profile = () => {
     }
 
     const onClose = () => {
-        setShowModal(prevShowModal => !prevShowModal)
-    }
+        toggleModal()
+      }
 
     return (
         <>
@@ -51,7 +51,9 @@ export const Profile = () => {
                                 <h5 className="modal-title">Editá tus datos</h5>
                                 <button onClick={onClose} className="btn btn-dark">Cerrar</button>
                             </div>
-                            <FormEditUser toggleModal={toggleModal} user={user} />
+                            <FormEditUser toggleModal={toggleModal}
+                                         user={user}
+                                         />
                         </div>
                     </div>
                 </div>

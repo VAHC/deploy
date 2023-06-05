@@ -15,9 +15,9 @@ const ContainerReviews = ({ bookId, toggleModal }) => {
   const dispatch = useDispatch();
   const [showForm, setShowForm] = useState(false);
   const user = useSelector((state)  => state.user) //estado que comprueba que se esta logueado
-
+console.log(reviewsBook);
   const notDeletedReviews = reviewsBook.filter(review => !review.deleted)
-
+//console.log( notDeletedReviews);
   useEffect(() => {
     dispatch(getReviewsBook(bookId));
   }, [bookId]);
@@ -48,10 +48,11 @@ const ContainerReviews = ({ bookId, toggleModal }) => {
           notDeletedReviews.map((r) => (
             <Review
               id={r.id}
+              deleted={r.deleted}
               title={r.title}
               qualification={r.qualification}
               comment={r.comment}
-              user={r.user}
+              userFirstName={r.userFirstName}
               key={r.id}
             />
           ))

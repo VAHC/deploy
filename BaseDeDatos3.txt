@@ -1,0 +1,35 @@
+** Cargar los Users y las Reviews
+
+Paso 1:
+
+Ejecuta este script con sql shell o pgAdmin4 en users:
+
+
+INSERT INTO public.users(
+    "firstName", "lastName", email, password, phone, profile, deleted, date_suscription, "createdDb"
+)
+VALUES
+    ('Noelia', 'Martino', 'noe@mail.com', '123456789', 1545436364, 'admin', false, NULL, true),
+    ('Lucas', 'Ferraro', 'lucas@mail.com', '123456789', 1524436536, 'admin', false, NULL, true),
+    ('Vir', 'Montoya', 'vir@mail.com', '123456789', 1534536536, 'admin', false, NULL, true),
+    ('Andres', 'Carola', 'andres@mail.com', '123456789', 1545356536, 'usuario', false, NULL, true),
+    ('Alejandro', 'Carola', 'ale@mail.com', '123456789', 1545352236, 'usuario', false, NULL, true),
+    ('Juan', 'Tibiletti', 'juan@mail.com', '123456789', 1545236536, 'usuario', false, NULL, true),
+    ('Victor', 'Hardoy', 'victor@mail.com', '123456789', 1534436536, 'usuario', false, NULL, true);
+
+
+PASO 2:
+
+Ejecuta este script con sql shell o pgAdmin4 en reviews:
+
+INSERT INTO public.reviews(
+    title, qualification, comment, deleted, "createdDb", id_book, id_user
+)
+VALUES
+    ('Excelente libro', 5, 'Excelente', false, true, 1, 1),
+    ('Aburrido', 2, 'Me dormía cada 2 páginas', false, true, 1, 2),
+    ('Podría estar mejor', 3, 'Podría ser mas corto', false, true, 2, 1),
+    ('Mas o menos. Me costó terminarlo', 3, 'Difícil de leer', false, true, 3, 1);
+
+
+

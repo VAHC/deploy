@@ -107,3 +107,7 @@ dist
 package-lock.json
 
 .DS_Store
+
+vite.config.js
+#crea la carpeta uploads pero sin archivos
+!uploads/

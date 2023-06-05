@@ -1,0 +1,31 @@
+** Cargar las addresses y la order_address
+
+Paso 1:
+
+Ejecuta este script con sql shell o pgAdmin4 en addresses:
+
+INSERT INTO public.addresses(
+    street_and_number, floor_and_department, city, "CP", province)
+VALUES 
+    ('Rivadavia 123', '5A', 'Córdoba', 5000, 'Córdoba'),
+    ('25 de Mayo 123', NULL, 'Tucumán', 4000, 'Tucumán'),
+    ('Belgrano 123', '4C', 'Pinamar', 1545, 'Buenos Aires');
+
+Paso 2:
+
+Ejecuta este script con sql shell o pgAdmin4 en order_address:
+
+INSERT INTO public.order_address(
+	"orderId", "addressId")
+	VALUES 
+    
+    (1,1 ),
+    (2,2 ),
+    (3,3 ),
+    (4,1 ),
+    (5,2 ),
+    (6,3 );
+
+
+
+   

@@ -18,7 +18,7 @@ const getBookById = async (id) => {
     },
     {
       model: Review,
-      attributes: ['id', 'title', 'qualification', 'comment', 'id_user'],
+      attributes: ['id', 'title', 'qualification', 'comment', 'deleted', 'id_user'],
       include: [
         {
           model: User,
@@ -52,6 +52,7 @@ const getBookById = async (id) => {
         title: r.title,
         qualification: r.qualification,
         comment: r.comment,
+        deleted: r.deleted,
         id_user: r.id_user,
         userFirstName: r.user.firstName,
         userLastName: r.user.lastName

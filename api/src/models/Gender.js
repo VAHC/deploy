@@ -22,7 +22,12 @@ module.exports = (sequelize) => {
           msg: 'El nombre del género debe tener entre 5 y 20 caracteres.'
         }
       }
-    }
+    },
+    createdDb: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
+    },
   },
   {
     timestamps: false

@@ -8,7 +8,7 @@ const deleteBook = async (id) => {
         throw Error(`No book has been found matching the id: ${id}`)
 
     } else {
-        bookToDelete.deleted = true;
+        bookToDelete.deleted = !bookToDelete.deleted;
         await bookToDelete.save()
     }
 }

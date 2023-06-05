@@ -26,7 +26,12 @@ export const GET_REVIEWS_BY_USER = "GET_REVIEWS_BY_USER";
 export const PUT_BOOK = "PUT_BOOK";
 export const PUT_REVIEW = "PUT_REVIEW";
 export const DELETE_REVIEW = "DELETE_REVIEW";
+export const DELETE_BOOK = "DELETE_BOOK";
 export const UPDATE_USER = "UPDATE_USER";
+export const ADD_TO_CART = "ADD_TO_CART";
+export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
+export const REMOVE_ITEMS = "REMOVE_ITEMS";
+export const EMPTY_CART = "EMPTY_CART";
 
 export const getAllBooks = () => {
   return async (dispatch) => {
@@ -98,7 +103,7 @@ export const postBook = (book) => {
 
 export const createUser = (user) => {
   return async function (dispatch) {
-    let response = await axios.post(`${URL_Railway}/books/auth/registro`, user)
+    let response = await axios.post(`${URL_Railway}/auth/registro`, user)
     return response
   }
 }
@@ -133,6 +138,8 @@ export const getReviewsBook = (bookId) => {
 }
 
 export const postReview = (review) => {
+  console.log(review);
+  console.log('se despacha la action');
   return async function (dispatch) {
     let response = await axios.post(`${URL_Railway}/reviews`, review)
     return response
@@ -143,8 +150,16 @@ export const login = (user) => {
   return { type: LOGIN_SUCCESS, payload: user }
 }
 
-export const logout = () => {
-  return { type: LOGOUT }
+// export const logout = () => {
+//   return { type: LOGOUT }
+// }
+
+export const logout = (userlogout) => {
+  return async (dispatch) => {
+    //const response = await axios.get(`${URL_Railway}/auth/logout`);
+    //const userlogout = response.data;
+    dispatch({ type: LOGOUT, payload: userlogout })
+  }
 }
 
 //trae todas las reviews de un usuario
@@ -167,7 +182,7 @@ export const modifyBook = (bookEdit) => {
 export const putReview = (reviewId, review) => {
   return async function (dispatch) {
     let response = await axios.put(`${URL_Railway}/reviews/${reviewId}`, review)
-    dispatch({type: PUT_REVIEW})
+    dispatch({ type: PUT_REVIEW })
     //console.log('la action toma el dispatch');
     return response
   }
@@ -181,9 +196,30 @@ export const deleteReview = (reviewId) => {
   }
 }
 
+export const deleteBook = async (bookId, dispatch) => {
+  console.log("esta es la action")
+  await axios.put(`http://localhost:3001/books/delete/${bookId}`)
+  dispatch({ type: DELETE_BOOK })}
+
 export const updateUser = (user) => {
   return async function (dispatch) {
     await axios.put(`${URL_Railway}/users`, user)
     dispatch({ type: UPDATE_USER })
   }
+}
+
+export const addToCart = (book) => {
+  return { type: ADD_TO_CART, payload: book }
+}
+
+export const removeFromCart = (book) => {
+  return { type: REMOVE_FROM_CART, payload: book }
+}
+
+export const removeItems = (id) => {
+  return { type: REMOVE_ITEMS, payload: id }
+}
+
+export const emptyCart = () => {
+  return { type: EMPTY_CART }
 }

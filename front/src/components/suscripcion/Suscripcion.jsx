@@ -1,10 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const handleLinkClick = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  })
+}
+
 export const Suscripcion = () => {
   return (
     <div>
-
       <h2 className='text-center fs-1'>¿Por qué debería suscribirme?</h2>
       <div className="card mb-3 mx-5 mt-3">
         <div className="row g-0">
@@ -35,7 +41,7 @@ export const Suscripcion = () => {
             <img src="./images/paso1.png" className="card-img-top" alt="Paso 1" />
             <div className="card-body text-center">
               <h5 className="card-title fs-4 fw-bold text-danger">Registrarse</h5>
-              <p className="card-text">Completá tus datos <Link to="/registro">aquí</Link>. Sólo te tomará unos minutos</p>
+              <p className="card-text">Completá tus datos <Link to="/registro" onClick={handleLinkClick} >aquí</Link>. Sólo te tomará unos minutos</p>
             </div>
           </div>
         </div>

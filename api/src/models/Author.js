@@ -22,7 +22,12 @@ module.exports = (sequelize) => {
           msg: 'El nombre del autor debe tener entre 5 y 50 caracteres.'
         }
       }
-    }
+    },
+    createdDb: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
+    },
   },
   {
     timestamps: false

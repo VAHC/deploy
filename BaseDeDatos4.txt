@@ -1,0 +1,38 @@
+** Cargar las Orders y OrderDetails
+
+Paso 1:
+
+Ejecuta este script con sql shell o pgAdmin4 en Orders:
+
+INSERT INTO public.orders(
+    date, quantity, price_total, deleted, "createdDb", id_user
+)
+VALUES 
+    ('2023-05-20', 1, 164.00, false, true, 1),
+    ('2023-05-20', 1, 164.00, false, true, 2),
+    ('2023-05-20', 1, 328.00, false, true, 3),
+    ('2023-05-20', 2, 500.00, false, true, 1),
+    ('2023-05-20', 2, 500.00, false, true, 2),
+    ('2023-05-20', 2, 1328.00, false, true, 3);
+
+
+Paso 2:
+
+Ejecuta este script con sql shell o pgAdmin4 en OrderDetails:
+
+INSERT INTO public."orderDetails"(
+    quantity, "createdDb", id_orden, id_book
+)
+VALUES 
+    (1, true, 1, 1),
+    (1, true, 2, 1),
+    (2, true, 3, 1),
+    (1, true, 4, 1),
+    (1, true, 4, 2),
+    (1, true, 5, 1),
+    (1, true, 5, 2),
+    (2, true, 6, 1),
+    (2, true, 6, 2);
+
+
+    

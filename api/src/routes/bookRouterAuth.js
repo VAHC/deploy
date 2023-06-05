@@ -1,128 +1,322 @@
 const { Router } = require('express')
-
-const {ValidateUser,LogOut} = require ('../handlers/auth/loginHandler')
+const passport = require('passport');
 const bookRouterAuth = Router()
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const PassPortLocal = require('passport-local').Strategy
+const jwt = require('jsonwebtoken');
+const {User} = require('../db')
+const AES = require('crypto-js/aes');
 
-require('../controllers/auth/gmail.js')
-require('../controllers/auth/local.js')
-const passport = require('passport')
-const CLIENT_URL = "http://127.0.0.1:5173";
 
-function isLoggedIn (req, res, next) {
-    req.isAuthenticated() ? next() :  res.status(401).json({ message: 'Credenciales inválidas validate' })
-     //res.sendStatus(401)
+
+
+UserJson=(id,firstName,lastName,email,phone,profile)=>
+{
+    return({
+      id,
+      firstName,
+      lastName,
+      email,
+      phone,
+      profile
+    })
+}
+
+////////////// funcion de google
+const findOrCreate= async (firstName,lastName,username,password,phone,done)=>{
+
+  try {
+    if(firstName && lastName && username && password ){
+      const [user, created] = await User.findOrCreate({ where: { email: username },
+        defaults: { password: password,
+                     profile: 'usuario',
+                     firstName: firstName,
+                     lastName: lastName,
+                    //  phone: phone,
+                     createdDb: false
+       }});
+       console.log(created);
+       if (created) {
+        // El usuario se creó correctamente
+              return done(null, user);
+        } else {
+        // Las credenciales son válidas, autenticación exitosa
+          if(user.dataValues.createdDb)
+          {
+            console.log('se creo usando el metodo local');
+            // se creo usando el metodo local
+              return done(null, false);
+          }else
+          {
+            console.log('exito');
+            return done(null, user);
+          }
+        }
+    }else{
+      // no existe alguna variable lo saco
+      return done(null, false);
+    }
+  } catch (err) {
+    console.log(err);
+    return done(null, false);
   }
-  
-  // serializacion
+}
+
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: 'http://localhost:3001/auth/google/callback',
+        scope: ['email', 'profile'],
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        // Perform additional actions if needed
+        console.log(profile.displayName); //juan lorenzo tibiletti
+        console.log(profile.name.familyName); // apellido
+        console.log(profile.name.givenName); // nombre
+        console.log(profile.emails[0].value); // nombre
+        findOrCreate(profile.name.givenName,profile.name.familyName,profile.emails[0].value,'qweg7s5w','',done)
+       // return done(null, profile);
+      }
+    )
+  );
+
+// Ruta de inicio de sesión con Google
+
+bookRouterAuth.get('/google', passport.authenticate('google', { session: false }));
+/// 1ero llega a bookRouterAuth.get('/google
+// 2do va new GoogleStrategy( 
+  // 3ero respondo ok
+  // 4to google te envia  '/google/callback',
+  // 5to  res.redirect(`http://127.0.0.1:5173/login/callback?token=${token}`);
+
+  // {
+  //   id: '100010358437647345103',
+  //   displayName: 'juan lorenzo tibiletti',
+  //   name: { familyName: 'tibiletti', givenName: 'juan lorenzo' },     
+  //   emails: [ { value: 'juanlorenzomdp@gmail.com', verified: true } ],
+  //   photos: [
+  //     {
+  //       value: 'https://lh3.googleusercontent.com/a/AAcHTtdnxfkvS2tEBd4IkxkAGObV8tJrd6KJahVUamzN=s96-c'
+  //     }
+  //   ],
+  //   provider: 'google',
+  //   _raw: '{\n' +
+  //     '  "sub": "100010358437647345103",\n' +
+  //     '  "name": "juan lorenzo tibiletti",\n' +
+  //     '  "given_name": "juan lorenzo",\n' +
+  //     '  "family_name": "tibiletti",\n' +
+  //     '  "picture": "https://lh3.googleusercontent.com/a/AAcHTtdnxfkvS2tEBd4IkxkAGObV8tJrd6KJahVUamzN\\u003ds96-c",\n' +
+  //     '  "email": "juanlorenzomdp@gmail.com",\n' +
+  //     '  "email_verified": true,\n' +
+  //     '  "locale": "es"\n' +
+  //     '}',
+  //   _json: {
+  //     sub: '100010358437647345103',
+  //     name: 'juan lorenzo tibiletti',
+  //     given_name: 'juan lorenzo',
+  //     family_name: 'tibiletti',
+  //     picture: 'https://lh3.googleusercontent.com/a/AAcHTtdnxfkvS2tEBd4IkxkAGObV8tJrd6KJahVUamzN=s96-c',        
+  //     email: 'juanlorenzomdp@gmail.com',
+  //     email_verified: true,
+  //     locale: 'es'
+  //   }
+  // }
+// Ruta de retorno de inicio de sesión con Google
+
+bookRouterAuth.get(
+  '/google/callback',
+  passport.authenticate('google', { session: false }),
+  (req, res) => {
+    //const username = req.user.username;
+    const clave = 'mi_clave_secreta';
+    console.log( req.user.dataValues);
+      let dato= UserJson(
+        req.user.dataValues.id,
+        req.user.dataValues.firstName,
+        req.user.dataValues.lastName,
+        req.user.dataValues.email,
+        // req.user.dataValues.phone,
+        req.user.dataValues.profile)
+        info={
+          datos:dato,
+          info:req.user.id
+        }
+
+  // Encriptar el texto
+  const objetoEncriptado = AES.encrypt(JSON.stringify(info), clave).toString();
+
+    // Generar un token JWT que contiene el token encriptado
+    const token = jwt.sign({ objetoEncriptado }, 'secreto', { expiresIn: '1d' });
+
+    // Redirigir al frontend con el token encriptado en la URL
+    res.redirect(`http://127.0.0.1:5173/ingresar/?token=${encodeURIComponent(token)}`);
+  }
+);
+
+/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
+/// funcion de local
+passport.use(new PassPortLocal({ passReqToCallback: true,  usernameField: 'email' }, async function (req, email, password, done) {
+  // entra por aca la info
+  console.log('local js');
+  const {firstName} = req.body
+  console.log('########');
+
+    if (firstName){
+      console.log('entre PassPortLocal');
+      CreateUser(req,email,password,done)
+    }else
+    {
+      FindUser(email,password,done)
+    }
+}))
+
+      const CreateUser= async (req,username,password,done)=>{
+
+        try {
+          const {firstName,lastName} = req.body
+          phone=req.body.phone
+          if(!phone)
+          {
+            phone=0
+          }
+          if(firstName && lastName && username && password  ){
+            const [user, created] = await User.findOrCreate({ where: { email: username },
+              defaults: { password: password,
+                          profile: 'usuario',
+                          firstName: firstName,
+                          lastName: lastName,
+                          phone: phone,
+
+            }});
+            console.log('----- valor created');
+            console.log(created);
+            console.log('-----');
+                if (created) {
+                // El usuario se creó correctamente
+                return done(null, user);
+                } else {
+                // Las credenciales son válidas, autenticación exitosa
+                return done(null, false);
+                }
+          }else{
+            // no existe alguna variable lo saco
+            return done(null, false);
+          }
+        } catch (err) {
+          console.log(err);
+          return done(null, false);
+        }
+      }
+
+      const FindUser =async (username,password,done) =>{
+      const usuario = await User.findOne({ where: { email: username } });
+      if(usuario)
+      {
+      console.log(usuario.dataValues.password);
+      if(password === usuario.dataValues.password)
+      {
+        return done(null, usuario);
+      }else
+      {
+        return done(null, false);
+      }
+      }else{
+      return done(null, false);
+      }  
+      }
+
+
+  bookRouterAuth.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+      if (err) {
+        return res.status(200).json({ message: 'Error en el servidor ERR' })
+      }
+      if (!user) {
+        return res.status(200).json({ message: 'Credenciales inválidas 401' })
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          return res.status(200).json({ message: 'Error en el servidor ERR LOGin' })
+        }
+
+        let dato= UserJson(
+        user.dataValues.id,
+        user.dataValues.firstName,
+        user.dataValues.lastName,
+        user.dataValues.email,
+        user.dataValues.phone,
+        user.dataValues.profile)
+        info={
+          datos:dato,
+          info:req.user.id
+        }
+
+        const token = jwt.sign({ info  }, 'secreto', { expiresIn: '1d' });
+        res.status(200).json({ token })
+      })
+    })(req, res, next)
+  })
+
+/// validacion
+  bookRouterAuth.get('/pepe', (req, res) => {
+    // Accede a los datos del usuario autenticado
+    const user = req.user;
+     console.log(('fsf'));
+    if(user){
+    // Aquí puedes realizar operaciones con los datos del usuario (por ejemplo, buscar en la base de datos, obtener información adicional, etc.)
+    // Luego, puedes enviar los datos del usuario como respuesta
+    res.json(user);
+    }else{
+      res.json({'erro':'error'})
+    }
+  })
+
+
+  const requireJWTAuth = (req, res, next) => {
+    const token = req.headers.authorization?.split(' ')[1];
+  console.log(req.headers.authorization);
+    if (!token) {
+      return res.send('noo');
+    }
+    try {
+      const decoded = jwt.verify(token, 'secreto');
+      req.user = decoded;
+      next();
+    } catch (error) {
+      return res.sendStatus(401);
+    }
+  };
+
+  bookRouterAuth.get('/protected', requireJWTAuth, (req, res) => {
+    const user = req.user; // Access the user object from the request
+    res.json({  user });
+  });
+
+  ///////////////serializacion cosas en comun
+    // serializacion
   // { id: 1, name: 'urial' }
   // 1 => Sereliazcion
   passport.serializeUser(function (user, done) {
     console.log('serializeUser');
-    let dato=''
-
-  //  console.log(user);
-      
-    if (user.provider) {
-      dato={
-        name:user.name.givenName,
-        pepe:'dsds'
-      }
-    } else {
-      dato={
-        name:user.name,
-        pepe:'dsds'
-      } 
-    }
-    done(null, dato)
+   // console.log(user);
+     done(null, user)
   })
   
-  // deseralizacion
+  
   passport.deserializeUser(function (user, done) {
     console.log('deserializeUser');
+   // console.log(user);
     done(null, user)
   })
   
-   bookRouterAuth.get('/validate', isLoggedIn, ValidateUser)
-
-  UserJson=(id,firstName,lastName,email,phone,profile)=>
-  {
-      return({
-        id,
-        firstName,
-        lastName,
-        email,
-        phone,
-        profile
-      })
-  }
-
-// Authentication routes
-bookRouterAuth.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error en el servidor ERR' })
-    }
-    if (!user) {
-      return res.status(401).json({ message: 'Credenciales inválidas 401' })
-    }
-    console.log('-****--');
-   // console.log(user);
-    // user {
-    //   dataValues: {
-    //     id: 1,
-    //     firstName: 'juan',
-    //     lastName: 'tibiletti',
-    //     email: 'admin@gmail.com',
-    //     password: '12345678',
-    //     phone: 1111,
-    //     profile: 'usuario',
-    //     createdDb: true,
-    //     deleted: false
-    //   },
-
-    console.log('--***-');
-    req.logIn(user, (err) => {
-      if (err) {
-        return res.status(500).json({ message: 'Error en el servidor ERR LOGin' })
-      }
-      let dato= UserJson(
-      user.dataValues.id,
-      user.dataValues.firstName,
-      user.dataValues.lastName,
-      user.dataValues.email,
-      user.dataValues.phone,
-      user.dataValues.profile)
-      res.status(200).json(dato)
-    })
-  })(req, res, next)
-})
-
-bookRouterAuth.get("/authSocial/success", (req, res) => {
-  //http://localhost:3001/books/auth/authSocial/success
-  
-    if (req.user) {
-     // let dato= UserJson(
-        //     req.user.dataValues.id,
-        //     req.user.dataValues.firstName,
-        //     req.user.dataValues.lastName,
-        //     req.user.dataValues.email,
-        //     req.user.dataValues.phone,
-        //     req.user.dataValues.profile)
-        //     res.status(200).json(dato);
-
-      res.status(200).json({
-        success: true,
-        message: "successfull",
-        user: req.user,
-        //   cookies: req.cookies
-      });
-    }
-  
-   res.send('siii')
-});
 
 
 
+  //// rutas  extras
 bookRouterAuth.post('/registro', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
@@ -143,58 +337,10 @@ bookRouterAuth.post('/registro', (req, res, next) => {
   })(req, res, next)
 })
 
-//router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
-
-// router.get(
-//   "/google/callback",
-//   passport.authenticate("google", {
-//     successRedirect: CLIENT_URL,
-//     failureRedirect: "/login/failed",
-//   })
-// );
-
-bookRouterAuth.get(
-  "authSocial/google",
-  passport.authenticate("google", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: "/login/failed",
-  })
-);
-
-
- bookRouterAuth.get('/authSocial',
-    passport.authenticate('google', { scope: ['email', 'profile'] }
-    ))
-// Ruta para recibir el callback de Google después de la autenticación
-// bookRouterAuth.get('/authSocial/google', passport.authenticate('google', 
-//     { successRedirect: CLIENT_URL,
-//       failureRedirect: '/login' }), (req, res) => {
-//   // El usuario se ha autenticado correctamente, puedes redirigir o responder con una respuesta JSON de éxito
-//  console.log('gggggggggggggg');
-//   console.log(req.user.dataValues.firstName);
-//   // user {
-//   //   dataValues: {
-//   //     id: 3,
-//   //     firstName: 'juan lorenzo',
-//   //     lastName: 'tibiletti',
-//   //     email: 'juanlorenzomdp@gmail.com',
-//   //     password: 'aeae4se50s',
-//   //     phone: 0,
-//   //     profile: 'usuario',
-//   //     createdDb: false,
-//   //     deleted: false
-//   //   },
-//   let dato= UserJson(
-//     req.user.dataValues.id,
-//     req.user.dataValues.firstName,
-//     req.user.dataValues.lastName,
-//     req.user.dataValues.email,
-//     req.user.dataValues.phone,
-//     req.user.dataValues.profile)
-//     res.status(200).json(dato);
-// });
-
-
-  bookRouterAuth.get('/logout', LogOut)
+function logOut(req, res) {
+  res.clearCookie('token'); // Ejemplo: borra la cookie llamada 'token'
+  res.json({ message: 'Cierre de sesión exitoso' });
+}
+bookRouterAuth.get('/logout', logOut)
 
 module.exports = bookRouterAuth

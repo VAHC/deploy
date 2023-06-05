@@ -4,13 +4,11 @@ import { useState, useEffect } from 'react';
 import validation from "./validationRegistro";
 import { useDispatch } from 'react-redux';
 import { createUser } from "../../redux/action";
-//require('../../../ruta')
-import { URL_Railway } from '../../../ruta';
+import {URL_Railway} from '../../../ruta'
 
 export const Registro = () => {
 
-    
-    const URL = URL_Railway+"/books/auth/authSocial" 
+    //const URL = URL_Railway+"/books/auth/authSocial"
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -83,13 +81,18 @@ export const Registro = () => {
             })
     }
 
+    //REGISTRO CON GOOGLE
+    const handleClick = async () => {
+        window.location.href = `${URL_Railway}/auth/google`;
+    }
+
     return (
         <div>
             <h2 className='text-center fs-1'>Registro</h2>
             {userCreated && <div className="d-flex justify-content-center">
                                 <img src="./images/userSuccess.png" className="w-25" alt="success" />
                             </div>}
-            {!userCreated && <div class="card mx-5 my-3">
+            {!userCreated && <div className="card mx-5 my-3">
                 <div className="d-flex justify-content-center m-2">
                     <form className="row g-2 md-2 w-75" onSubmit={handleSubmit}>
                         <div className="col-md-6">
@@ -141,8 +144,7 @@ export const Registro = () => {
                         </div>
 
                         <div className="col-md-4">
-                            URLRailway
-                            <label htmlFor="passwordC"  className="form-label">Confirmar contraseña</label>
+                            <label htmlFor="passwordC" className="form-label">Confirmar contraseña</label>
                             <input type="password" className="form-control" name="passwordC" value={inputsConfirm.passwordC} onChange={handleInputChange} required />
                             {errors.passwordConfirm && <p className="text-danger">{errors.passwordConfirm}</p>}
                         </div>
@@ -152,9 +154,11 @@ export const Registro = () => {
                         </div>
 
                         <div className="col-12 d-flex justify-content-center m-1">
-                            <a href={URL} className="btn btn-outline-dark">
-                                <i className="bi bi-google fs-3 mx-2"></i>Registrarme con G-mail
-                            </a>
+                            <div className='col-auto text-center'>
+                                <button onClick={handleClick} className="btn btn-outline-dark">
+                                    <i className="bi bi-google fs-3 mx-2"></i>Registrarme con G-mail
+                                </button>
+                            </div>
                         </div>
 
                         <div className="row text-center m-2">

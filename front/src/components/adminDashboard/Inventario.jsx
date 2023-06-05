@@ -11,9 +11,9 @@ import {
     Modal,
 } from "react-bootstrap";
 import { FormCreateBook } from "../formCreateBook/formCreateBook";
-import FormEditBook from "./FormEditBook"
+import FormEditBook from "./FormEditBook";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBooks } from "../../redux/action";
+import { getAllBooks, deleteBook } from "../../redux/action";
 
 const Inventario = () => {
     const allBooks = useSelector((state) => state.allBooks);
@@ -32,8 +32,8 @@ const Inventario = () => {
 
     useEffect(() => {
         dispatch(getAllBooks());
-        //console.log("se hace el dispatch para buscar allBooks");
-    }, []);
+        //console.log("se hace el dispatch para buscar allBooks");  
+    }, [dispatch]);
 
     const handleGenreFilterChange = (e) => {
         const genreValue = e.target.value;
@@ -170,9 +170,7 @@ const Inventario = () => {
                 <Button
                     variant="primary"
                     onClick={() => {
-                        const updatededitModalshow = [
-                            ...editModalshow,
-                        ];
+                        const updatededitModalshow = [...editModalshow];
                         updatededitModalshow[bookIndex] = true;
                         seteditModalshowModalshow(updatededitModalshow);
                     }}
@@ -194,10 +192,8 @@ const Inventario = () => {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-
-                       <FormEditBook book={book} /> 
-                        
-                        </Modal.Body>
+                        <FormEditBook book={book} />
+                    </Modal.Body>
                     <Modal.Footer>
                         <Button
                             onClick={() => {
@@ -205,7 +201,9 @@ const Inventario = () => {
                                     ...editModalshow,
                                 ];
                                 newUpdatededitModalshow[bookIndex] = false;
-                                seteditModalshowModalshow(newUpdatededitModalshow);
+                                seteditModalshowModalshow(
+                                    newUpdatededitModalshow
+                                );
                             }}
                         >
                             Close
@@ -216,7 +214,11 @@ const Inventario = () => {
         );
     };
 
-
+    const ableButtonHandler = async (bookId) => {
+        console.log("Estoy modificando el deleted de este libro: " + bookId )
+        await deleteBook(bookId,dispatch)
+        dispatch(getAllBooks());
+    };
 
     const inventarioMap = filteredBooksByAuthor.map((book, index) => {
         return (
@@ -254,8 +256,13 @@ const Inventario = () => {
                 <td>{book.price}</td>
                 <td>{book.stock}</td>
                 <td>
-                    {editModal(index,book)}
-                    <Button variant="danger">Habilitación</Button>
+                    {editModal(index, book)}
+                    <Button
+                        onClick={() => ableButtonHandler(book.id)}
+                        variant={book.deleted ? "success" : "danger"}
+                    >
+                        {book.deleted ? "Habilitar" : "deshabilitar"}
+                    </Button>
                 </td>
             </tr>
         );
@@ -283,7 +290,6 @@ const Inventario = () => {
                         AGREGAR LIBRO
                     </Button>
                     {addBookModal()}
-
                     <Tabs className="mb-3" fill>
                         <Tab eventKey="titulo" title="Filtrar por Título">
                             <Form.Group

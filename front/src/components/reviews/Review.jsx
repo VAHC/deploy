@@ -21,7 +21,7 @@ const Review = (props) => {
         <div className="comment-container border rounded mt-3 p-2 mx-auto" style={{ overflowY: 'scroll', maxHeight: '150px', width: '90%' }}>
         <p>{props.comment}</p>
       </div>
-        <h6 className="text-end">{props.user}</h6>
+        <h6 className="text-end">{props.userFirstName}</h6>
       </div>
     )
 };
