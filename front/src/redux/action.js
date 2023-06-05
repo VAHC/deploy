@@ -1,5 +1,5 @@
 import axios from 'axios';
-import  URL_Railway  from '../../ruta';
+import  {URL_Railway}  from '../../ruta';
 
 // Action types
 
