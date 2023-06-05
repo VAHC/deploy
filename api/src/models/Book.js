@@ -84,9 +84,9 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: false
     },
-    imageId: {
-      type: DataTypes.STRING
-    },
+    // imageId: {
+    //   type: DataTypes.STRING
+    // },
     createdDb: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
