@@ -1,6 +1,7 @@
 const passport = require('passport')
  require('dotenv').config()
  const { User } = require('../../db');
+ const {URL_Railway} = require('../../../rutas')
 
 // const GoogleStrategy = require('passport-google-oauth2').Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -46,7 +47,7 @@ passport.use(
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: 'http://localhost:3001/books/auth/authSocial/google',
+        callbackURL: `${URL_Railway}/books/auth/authSocial/google`,
       },
       async (accessToken, refreshToken, profile, done) => {
         // Aquí puedes realizar acciones adicionales, como buscar o crear un usuario en tu base de datos

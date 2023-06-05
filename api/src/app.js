@@ -6,13 +6,14 @@ const routes = require('./routes/index.js');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const cors = require('cors');
+const {URL_Vercel} = require('../rutas.js')
 
 const server = express();
 
 // Configuración básica de CORS
 const corsOptions = {
   // origin: 'http://127.0.0.1:5173',
-  origin: 'https://deploy-six-amber.vercel.app/',
+  origin: URL_Vercel,
   credentials: true,
 };
 server.use(express.static('uploads')) // Carpeta visible, es la raíz

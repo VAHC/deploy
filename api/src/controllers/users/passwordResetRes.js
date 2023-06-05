@@ -2,7 +2,7 @@ const { User } = require('../../db');
 const jwt = require('jsonwebtoken');
 const { MailgmailPasswordDone } = require('../../handlers/mailing/mailing');
 require('dotenv').config();
-
+const {URL_Vercel} = require('../../../rutas')
 
 
 const passwordResetRes = async (token, password) => {
@@ -24,7 +24,7 @@ const passwordResetRes = async (token, password) => {
 
         await userToReset.save()
 
-        await MailgmailPasswordDone("Rayuela",`http://127.0.0.1:5173/ingresar`,`${userToReset.firstName}`, 'Intro',`${userToReset.email}`, 'Cambio de contraseña')
+        await MailgmailPasswordDone("Rayuela",`${URL_Vercel}/ingresar`,`${userToReset.firstName}`, 'Intro',`${userToReset.email}`, 'Cambio de contraseña')
     }
 }
     module.exports = passwordResetRes;
