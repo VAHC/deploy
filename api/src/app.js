@@ -11,7 +11,8 @@ const server = express();
 
 // Configuración básica de CORS
 const corsOptions = {
-  origin: 'http://127.0.0.1:5173',
+  // origin: 'http://127.0.0.1:5173',
+  origin: 'https://deploy-six-amber.vercel.app/',
   credentials: true,
 };
 server.use(express.static('uploads')) // Carpeta visible, es la raíz
