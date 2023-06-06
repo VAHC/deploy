@@ -1,5 +1,5 @@
 import axios from 'axios';
-import  {URL_Railway}  from '../../ruta';
+import { URL_Railway } from '../../ruta';
 
 // Action types
 
@@ -32,6 +32,7 @@ export const ADD_TO_CART = "ADD_TO_CART";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 export const REMOVE_ITEMS = "REMOVE_ITEMS";
 export const EMPTY_CART = "EMPTY_CART";
+export const FILL_CART = "FILL_CART";
 
 export const getAllBooks = () => {
   return async (dispatch) => {
@@ -197,7 +198,7 @@ export const deleteReview = (reviewId) => {
 }
 
 export const deleteBook = async (bookId, dispatch) => {
-  console.log("esta es la action")
+  //console.log("esta es la action")
   await axios.put(`${URL_Railway}/books/delete/${bookId}`)
   dispatch({ type: DELETE_BOOK })}
 
@@ -205,21 +206,50 @@ export const updateUser = (user) => {
   return async function (dispatch) {
     await axios.put(`${URL_Railway}/users`, user)
     dispatch({ type: UPDATE_USER })
+    return user
   }
 }
 
 export const addToCart = (book) => {
-  return { type: ADD_TO_CART, payload: book }
+  //console.log('entra la action');
+  return (dispatch, getState) => {
+    dispatch ({ type: ADD_TO_CART, payload: book });
+    const updatedCart3 = getState().cart;
+    localStorage.setItem('items', JSON.stringify(updatedCart3));
+  }
 }
 
 export const removeFromCart = (book) => {
-  return { type: REMOVE_FROM_CART, payload: book }
-}
+  return (dispatch, getState) => {
+    dispatch({ type: REMOVE_FROM_CART, payload: book });
+    const updatedCart = getState().cart;
+    localStorage.setItem('items', JSON.stringify(updatedCart));
+    if (!updatedCart.length) {
+      localStorage.removeItem('items');
+    }
+  };
+};
 
 export const removeItems = (id) => {
-  return { type: REMOVE_ITEMS, payload: id }
+  return (dispatch, getState) => {
+    dispatch ({type: REMOVE_ITEMS, payload: id });
+    const updatedCart2 = getState().cart;
+    localStorage.setItem('items', JSON.stringify(updatedCart2));
+    if (!updatedCart2.length) {
+      localStorage.removeItem('items');
+    }
+
+  }
 }
 
 export const emptyCart = () => {
   return { type: EMPTY_CART }
+}
+
+export const fillCart = (dataCart) => {
+  //console.log('toma la action');
+  return {
+    type: FILL_CART,
+    payload: dataCart
+  }
 }

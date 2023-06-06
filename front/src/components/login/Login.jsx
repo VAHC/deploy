@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from "../../redux/action";
-import  {URL_Railway}  from '../../../ruta';
+import { URL_Railway } from '../../../ruta';
 import axios from 'axios';
 import { decode } from 'jsonwebtoken-esm';
 
@@ -114,7 +114,7 @@ export const Login = ({setCompoActivo}) => {
                             </div>
 
                             <div className="row text-center my-2">
-                                <Link className="card-text" onClick={() => onClickHandler('formPass')}>
+                                <Link className="card-text text-reset text-decoration-none fw-bold" onClick={() => onClickHandler('formPass')}>
                                     Olvidé mi contraseña
                                 </Link>
                             </div>
@@ -134,7 +134,7 @@ export const Login = ({setCompoActivo}) => {
 
                         <div className="row text-center mt-2">
                             <p className="card-text">
-                                ¿No tenés cuenta? <Link to="/registro">Registrate</Link>
+                                ¿No tenés cuenta? <Link className="text-reset text-decoration-none fw-bold" onClick={() => onClickHandler('registro')}>Registrate</Link>
                             </p>
                         </div>
                     </div>

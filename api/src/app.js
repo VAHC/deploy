@@ -8,7 +8,6 @@ const session = require('express-session');
 const cors = require('cors');
 const {URL_Vercel} = require('../rutas.js')
 
-
 const server = express();
 
 // Configuración básica de CORS

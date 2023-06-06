@@ -4,12 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { postBook, getAllBooks } from "../../redux/action";
 import validation from "./validation";
 
-
 export const FormCreateBook = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const books = useSelector((state) => state.books);
-    const [file, setFile] = useState(null)
 
     const genresNoRepeat = books
         .flatMap((book) => book.genders)
@@ -52,12 +50,12 @@ export const FormCreateBook = () => {
         title: "",
         publisher: "",
         description: "",
-        price: "",
-        stock: "",
+        price: 0,
+        stock: 0,
         publishedDate: "",
+        image: "",
         authors: [],
         genders: [],
-        image:false,
     });
 
     const [errors, setErrors] = useState({
@@ -68,9 +66,9 @@ export const FormCreateBook = () => {
         price: "",
         stock: "",
         publishedDate: "",
+        image: "",
         authors: "",
         genders: "",
-        image:false,
     });
 
     const [formComplete, setFormComplete] = useState(false); //estodo local para manejar el boton del submit y el envio de datos
@@ -78,7 +76,7 @@ export const FormCreateBook = () => {
 
     //handler que maneja el estado de los inputs
     const inputHandler = (e) => {
-       if (e.target.name === "authors") {
+        if (e.target.name === "authors") {
             setInput({
                 ...input,
                 authors: [...input.authors, e.target.value], //traigo todo lo que esta en el array y le concateno el nuevo valor
@@ -88,37 +86,27 @@ export const FormCreateBook = () => {
                 ...input,
                 genders: [...input.genders, e.target.value], //traigo todo lo que esta en el array y le concateno el nuevo valor
             });
-        }else if (e.target.name === "image") {
-            setFile(e.target.files[0])
-            setInput({
-                ...input,
-                image: true, //
-            });
-        }
-         else {
+        } else {
             setInput({
                 ...input,
                 [e.target.name]: e.target.value,
             });
         }
-
         setErrors(
             validation({
                 ...input,
                 [e.target.name]: e.target.value,
-            },file) );
+            })
+        );
     };
 
     //useEffect que escucha los estados locales input y errors para setear el estado FormComplete
     useEffect(() => {
         let values = Object.values(input);
-        console.log(values);
         let notComplete = values.filter(
             (value) => value === "" || value.length === 0
         );
         //let error = Object.keys(errors);
-        console.log(notComplete);
-
         if (!notComplete.length) setFormComplete(true);
     }, [input]);
     //     if(!notComplete.length && !error.length) setFormComplete(true)
@@ -135,18 +123,7 @@ export const FormCreateBook = () => {
     const submitHandler = (e) => {
         e.preventDefault();
         if (formComplete) {
-            const data = new FormData()
-            data.append('title', input.title)
-            data.append('publisher', input.publisher)
-            data.append('description', input.description)
-            data.append('price', input.price)
-            data.append('stock', input.stock)
-            data.append('publishedDate', input.publishedDate)
-            data.append('authors', input.authors)
-            data.append('genders', input.genders)
-            data.append('image', file)
-
-            dispatch(postBook(data));
+            dispatch(postBook(input));
             setSuccess(true); // al setearse en true cambia el rederizado
             setInput({
                 title: "",
@@ -155,6 +132,7 @@ export const FormCreateBook = () => {
                 price: "",
                 stock: "",
                 publishedDate: "",
+                image: "",
                 authors: [],
                 genders: [],
             });
@@ -165,6 +143,7 @@ export const FormCreateBook = () => {
                 price: "",
                 stock: "",
                 publishedDate: "",
+                image: "",
                 authors: "",
                 genders: "",
             });
@@ -365,7 +344,7 @@ export const FormCreateBook = () => {
                                     style={{ width: "100%" }}
                                     className="form-control"
                                     id="publishedDate"
-                                    type="month"
+                                    type="text"
                                     value={input.publishedDate}
                                     name="publishedDate"
                                     placeholder="mm/aaaa"
@@ -395,9 +374,10 @@ export const FormCreateBook = () => {
                                     style={{ width: "100%" }}
                                     className="form-control"
                                     id="image"
-                                    type='file'
-                                    accept='image/jpeg'
+                                    type="text"
+                                    value={input.image}
                                     name="image"
+                                    placeholder="url"
                                     onChange={inputHandler}
                                 />
                                 {/* <p>{errors.image}</p> */}

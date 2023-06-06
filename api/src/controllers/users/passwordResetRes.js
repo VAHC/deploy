@@ -5,6 +5,7 @@ require('dotenv').config();
 const {URL_Vercel} = require('../../../rutas')
 
 
+
 const passwordResetRes = async (token, password) => {
 
     const secretKey = process.env.JWT_SECRET_KEY;

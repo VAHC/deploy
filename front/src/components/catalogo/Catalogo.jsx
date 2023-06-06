@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 // En este componente se renderizan todos los demas.
 export const Catalogo = () => {
     const dispatch = useDispatch();
+    const cart = useSelector((state) => state.cart)
 
     useEffect(() => {
         dispatch(getAllBooks());

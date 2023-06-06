@@ -14,7 +14,6 @@ import { ProtectRoutes } from "./components/protectRoutes/ProtecRoutes";
 import Dashboard from "./components/adminDashboard/Dashboard"
 import UserDashboard from "./components/UserDashboard/UserDashboard";
 import { Ingreso } from "./components/login/Ingreso";
-import { Registro } from "./components/login/Registro";
 import { FAQs } from "./components/footer/FAQs";
 import MyReviews from "./components/UserDashboard/myReviews/MyReviewsContainer";
 import FormEditReviews from "./components/UserDashboard/myReviews/FormEditReviews";
@@ -60,7 +59,6 @@ function App() {
         <Route exact path="/suscripcion" element={<Suscripcion/>}/>
         <Route exact path="/catalogo" element={<Catalogo/>}/>
         <Route exact path="/ingresar" element={<Ingreso/>}/>
-        <Route exact path="/registro" element={<Registro/>}/>
         <Route exact path="/preguntas-frecuentes" element={<FAQs/>}/>
         <Route exact path="/perfil" element={<UserDashboard/>}/>
         <Route exact path="/misReseñas" element={<MyReviews/>}/>

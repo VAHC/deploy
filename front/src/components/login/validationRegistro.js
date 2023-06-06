@@ -1,11 +1,11 @@
 const validation = (userInputs, inputsConfirm) => {
     const errors = {}
 
-    if (userInputs.name === "") {
-        errors.name = "Escribí tu nombre"
+    if (userInputs.firstName === "") {
+        errors.firstName = "Escribí tu nombre"
     }
-    if (!/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]*$/.test(userInputs.name)) {
-        errors.name = "Tu nombre no puede contener números ni símbolos"
+    if (!/^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]*$/.test(userInputs.firstName)) {
+        errors.firstName = "Tu nombre no puede contener números ni símbolos"
     }
     if (userInputs.lastName === "") {
         errors.lastName = "Escribí tu apellido"

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import  URL_Railway  from "../../../ruta";
+import { URL_Railway } from "../../../ruta";
 import axios from "axios";
 
 export const FormResetPass = ({ setCompoActivo }) => {
@@ -42,7 +42,7 @@ export const FormResetPass = ({ setCompoActivo }) => {
                 </div>
             </div>}
             {!success && <div>
-                <h2 className='text-center fs-1 my-3'>Recuperar contraseña</h2>
+                <h2 className='text-center fs-1 my-3 fs-2'>Recuperar contraseña</h2>
                 <div className="d-flex justify-content-center m-2">
                     <div className="card w-75 mb-5">
                         <div className="card-body">
@@ -64,9 +64,10 @@ export const FormResetPass = ({ setCompoActivo }) => {
                                 <div className="text-center mb-3">
                                     <button className={error === "" ? "btn btn-dark w-50" : "btn btn-dark w-50 disabled"} onClick={handleClickPass}>Restablecer contraseña</button>
                                 </div>
-                                <div className="text-center mb-3">
-                                    <Link className="card-text" onClick={() => onClickHandler('login')}>
-                                        Volver
+
+                                <div className="text-center">
+                                    <Link className="card-text text-reset text-decoration-none fw-bold fs-6" onClick={() => onClickHandler('login')}>
+                                        <i className="bi bi-arrow-left-circle-fill fs-5 mx-1"></i>Volver
                                     </Link>
                                 </div>
                             </form>

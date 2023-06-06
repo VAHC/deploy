@@ -1,4 +1,4 @@
-const validation = (input,file) => {
+const validation = (input) => {
 let errors = {};
 
   // Validación para el campo "title"
@@ -32,9 +32,11 @@ let errors = {};
   }
 
   // Validación para el campo "image"
-  if (!input.image && (file === null)) {
+  if (!input.image) {
     errors.image = 'La imagen de la portada es obligatoria';
-  } 
+  } else if (!/^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(input.image)) {
+    errors.image = 'La imagen de la portada no tiene un formato de URL válido';
+  }
 
   // Validación para el campo "authors"
   if (!input.authors || !input.authors.length) {

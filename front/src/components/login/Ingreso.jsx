@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Login } from "./Login";
 import { FormResetPass } from "./FormResetPass";
+import { Registro } from "./Registro";
 
 export const Ingreso = () => {
 
@@ -9,6 +10,7 @@ export const Ingreso = () => {
     const compoRender= ()=>{
         if (compoActivo === "login") return <Login setCompoActivo={setCompoActivo}/>
         if (compoActivo=== "formPass") return <FormResetPass setCompoActivo={setCompoActivo}/>
+        if (compoActivo=== "registro") return <Registro setCompoActivo={setCompoActivo}/>
     }
 
     return (

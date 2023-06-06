@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { searchByNameOrAuthor,changePagina } from '../../redux/action';
 import { Paginado } from './Paginado';
 import { Link } from 'react-router-dom';
+import {totalItems} from '../shoppingCart/helpers'
 
 export const SearchBar = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ export const SearchBar = () => {
   const[notFound, setNotFound] = useState(false);
 
   const booksPage = useSelector((state) => state.booksPage)
+  const cart = useSelector((state) => state.cart)
 
   const handlerChange = (e) => {
     setInput(e.target.value)
@@ -40,7 +42,7 @@ export const SearchBar = () => {
           <Paginado />
           <Link to="/carrito">
             <i className="bi bi-cart text-light fs-3"></i>
-            <span className="badge bg-danger ms-1 rounded-circle">9</span>
+            <span className="badge bg-danger ms-1 rounded-circle">{totalItems(cart)}</span>
           </Link>
         </div>
       </nav>
