@@ -67,7 +67,7 @@ const findOrCreate= async (firstName,lastName,username,password,phone,done)=>{
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${URL_Railway}/auth/google/callback`,
+        callbackURL: 'https://deploy-production-dccf.up.railway.app/auth/google/callback',
         scope: ['email', 'profile'],
       },
       async (accessToken, refreshToken, profile, done) => {
@@ -151,7 +151,8 @@ bookRouterAuth.get(
     const token = jwt.sign({ objetoEncriptado }, 'secreto', { expiresIn: '1d' });
 
     // Redirigir al frontend con el token encriptado en la URL
-    res.redirect(`${URL_Vercel}/ingresar/?token=${encodeURIComponent(token)}`);
+    // res.redirect(`${URL_Vercel}/ingresar/?token=${encodeURIComponent(token)}`);
+    res.redirect('https://deploy-six-amber.vercel.app/ingresar/?token=${encodeURIComponent(token)}');
   }
 );
 
